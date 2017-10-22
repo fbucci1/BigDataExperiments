@@ -1,0 +1,133 @@
+* Install Ubuntu 14.04.5LTS in a Virtual Box VM
+	Network -> NAT -> Connect cable
+	Network -> Enable 2nd NIC -> Host-only -> Connect cable
+	General -> Advanced -> Clipboard -> Bidireccional
+	Do not download updates while installing (It does not save time as plenty of updates need to be installed anyways after install finishes)
+	Do not download 3P software
+	Erase disk and install Ubuntu
+	administrator / xxxyourpasswordxxx
+	Hostname: u1404cdh
+Restart
+
+* Software & Updates (DO NOT SKIP THIS STEP)
+	Updates -> Uncheck recommended updates, pre-releases y unsupported software.
+	Install all updates. 
+Restart
+	
+* Install VBox guest additions
+	Download and install in the host machine
+	Install in the guest machine (Right control + K)
+Restart
+
+* Firefox
+	Uncheck Firefox data collection and use.
+
+** Step2: Make password less sudo access
+#NOT DONE: sudo adduser `whoami` sudo;
+sudo sed -i '/%sudo.*/c\%sudo   ALL=(ALL:ALL) NOPASSWD:ALL' /etc/sudoers;
+#NOT DONE: sudo visudo 
+#	# User privilege specification
+#	root	ALL=(ALL:ALL) ALL
+#	# Members of the admin group may gain root privileges
+#	%admin ALL=(ALL:ALL) ALL
+#	# Allow members of group sudo to execute any command
+#	%sudo   ALL=(ALL:ALL) NOPASSWD: ALL	
+
+** Step3: Assignment of static IP address and hostname
+# NOT DONE: sudo hostname u1404cdh
+# NOT DONE: sudo cat /etc/hostname
+# 	u1404cdh
+# NOT DONE: sudo gedit /etc/hosts
+#	127.0.0.1	localhost
+#	127.0.0.1	u1404cdh
+sudo sed -i 's/127\.0\.1\.1/127\.0\.0\.1/' /etc/hosts;
+
+** Step4: Installation and Configuration of SSH
+sudo apt-get install -y openssh-server
+ssh-keygen
+	Confirm
+ssh-copy-id u1404cdh
+	Confirm
+#check connection:  
+ssh administrator@u1404cdh 'sudo ls -la /etc/hosts'
+	
+** Step5: 
+#NOT DONE: sudo iptables -A INPUT -p tcp --dport ssh -j ACCEPT;
+#NOT DONE: sudo rm -rf /usr/share/cmf /var/lib/cloudera* /var/cache/yum/cloudera*;
+#NOT DONE: sudo ufw disable;
+#NOT DONE: sudo printf "Package: *\nPin: release o=Cloudera, l=Cloudera\nPin-Priority: 501\n" | sudo tee -a /etc/apt/preferences.d/cloudera.pref;
+sudo sysctl vm.swappiness=10 && sudo echo 'vm.swappiness = 10' | sudo tee -a /etc/sysctl.conf;
+
+** Step6: Setup Cloudera Manager:
+cd ~
+wget http://archive.cloudera.com/cm5/installer/latest/cloudera-manager-installer.bin;
+sudo chmod +x cloudera-manager-installer.bin
+sudo ./cloudera-manager-installer.bin
+
+http://localhost:7180
+	Free license
+	DO NOT CHECK SINGLE USER
+	Parcels
+	administrator / administrator's password
+	Host Inspector 2 warnings checking server... ignore them
+		* The following failures were observed in checking hostnames...
+			Host localhost expected to have name localhost but resolved (InetAddress.getLocalHost().getHostName()) itself to u1404cdh.		
+		* The following errors were found while checking /etc/hosts... 
+			The hostname localhost is not the first match for address 127.0.0.1 in /etc/hosts on localhost. Instead, u1404cdh is the first match. The FQDN must be the first entry in /etc/hosts for the corresponding IP.
+			In /etc/hosts on localhost, the IP 127.0.0.1 is present multiple times. A given IP should only be listed once.
+	
+	Full, do not change any service.
+	Embedded database.
+	Review changes, do not change any paramemter.
+
+After installation is finished there are several warnings, several of them can be removed by chaging these settings: 
+
+Use Cloudera Manager -> HDFS -> Configuration -> 
+	dfs.datanode.max.locked.memory 
+			-> 32 KiB
+	dfs.safemode.threshold.pct
+			0.999 -> 0
+Use Cloudera Manager -> YARN -> Configuration -> 
+	yarn.nodemanager.resource.memory-mb
+		1 GiB -> 2 GiB
+	yarn.scheduler.minimum-allocation-mb
+		1 GiB -> 128 MiB
+	yarn.scheduler.maximum-allocation-mb
+		1 GiB -> 2 GiB
+	yarn.app.mapreduce.am.resource.mb
+		0 -> 128 MiB
+	mapreduce.task.io.sort.mb
+		256 MB -> 128 MB
+	mapreduce.map.memory.mb	
+		empty -> 128 MiB	
+	mapreduce.reduce.memory.mb
+		empty -> 128 MiB
+
+Restart
+	
+* After finishing setup: Open Hue 
+	http://localhost:8889
+	administrator / (same password as for the Linux user)
+
+* There will still be several warnings. 
+	Clean the rest of the warnings and errors (i.e. replication<3, number of zookeeper servers<3, memory warnings, etc.)
+
+Uninstall: 
+sudo /usr/share/cmf/uninstall-cloudera-manager.sh
+sudo service cloudera-scm-server stop
+sudo service cloudera-scm-server-db stop
+sudo apt-get -y remove cloudera-manager-server
+sudo apt-get -y remove cloudera-manager-server-db-2
+sudo /usr/sbin/service cloudera-scm-agent hard_stop
+sudo apt-get -y purge 'cloudera-manager-*'
+sudo apt-get clean 
+sudo umount cm_processes
+sudo rm -Rf /usr/share/cmf /var/lib/cloudera* /var/cache/yum/cloudera* /var/log/cloudera* /var/run/cloudera*
+sudo rm /tmp/.scm_prepare_node.lock
+sudo rm -Rf /var/lib/flume-ng /var/lib/hadoop* /var/lib/hue /var/lib/navigator /var/lib/oozie /var/lib/solr /var/lib/sqoop* /var/lib/zookeeper
+sudo rm -Rf data_drive_path/dfs data_drive_path/mapred data_drive_path/yarn
+
+Resources:
+https://www.cloudera.com/documentation/enterprise/latest/topics/installation.html
+
+
