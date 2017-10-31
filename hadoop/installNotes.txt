@@ -70,6 +70,32 @@ EOL
 
 sudo chmod go-w /etc/environment
 
-** Step6: Setup other dependencies... https://medium.com/@josemarcialportilla/installing-scala-and-spark-on-ubuntu-5665ee4b62b1
+** Step7: Setup other dependencies... https://medium.com/@josemarcialportilla/installing-scala-and-spark-on-ubuntu-5665ee4b62b1
+** Step 7.1: Install Scala
+sudo apt-get install scala
+scala
+println(“Hello World”)
+:q
 
-** Step7: Setup Spark:
+** Step 7.2: Install Git
+sudo apt-get install git
+
+** Step 7.3: Install Spark
+sudo mkdir /usr/local/mybigdata
+sudo chmod ugo+wr /usr/local/mybigdata/
+
+Go to https://spark.apache.org/downloads.html and download a pre-built for Hadoop 2.7 version of Spark.
+cd ~/Downloads
+tar xvf spark-2.0.2-bin-hadoop2.7.tgz
+mv spark-2.2.0-bin-hadoop2.7 /usr/local/mybigdata/
+rm spark-2.2.0-bin-hadoop2.7.tgz
+
+** Step8: Check Spark: 
+echo "a b b b c c c c c c c d d d e e e e e e e e e e f f g h i">input.txt
+./spark-shell
+
+val tokenized = sc.textFile("input.txt").flatMap(_.split(" "))
+val wordCounts = tokenized.map((_, 1)).reduceByKey(_ + _)
+val filtered = wordCounts.filter(_._2 >= 5)
+System.out.println(filtered.collect().mkString(", "))
+:q
