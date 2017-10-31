@@ -115,3 +115,39 @@ mkdir input
 cp /usr/local/mybigdata/hadoop-2.8.2/etc/hadoop/*.xml input
 /usr/local/mybigdata/hadoop-2.8.2/bin/hadoop jar /usr/local/mybigdata/hadoop-2.8.2/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.8.2.jar grep input output 'dfs[a-z.]+'
 cat output/*
+
+gedit /usr/local/mybigdata/hadoop-2.8.2/etc/hadoop/core-site.xml
+<configuration>
+    <property>
+        <name>fs.defaultFS</name>
+        <value>hdfs://localhost:9000</value>
+    </property>
+</configuration>
+
+gedit /usr/local/mybigdata/hadoop-2.8.2/etc/hadoop/hdfs-site.xml
+<configuration>
+    <property>
+        <name>dfs.replication</name>
+        <value>1</value>
+    </property>
+</configuration>
+
+ssh localhost
+	yes
+
+mkdir /tmp/hadoop-administrator/dfs/name
+
+cd /usr/local/mybigdata/hadoop-2.8.2/
+bin/hdfs namenode -format
+
+sbin/start-dfs.sh
+	yes
+
+bin/hdfs dfs -mkdir /user
+bin/hdfs dfs -mkdir /user/administrator
+
+bin/hdfs dfs -mkdir input
+bin/hdfs dfs -put etc/hadoop/*.xml input
+bin/hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-2.8.2.jar grep input output 'dfs[a-z.]+'
+bin/hdfs dfs -cat output/*
+
