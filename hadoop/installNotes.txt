@@ -61,11 +61,14 @@ sudo apt-get install oracle-java8-installer
 java -version 
 	java version "1.8.0_xxx"
 sudo apt-get install oracle-java8-set-default
+sudo chmod go+w /etc/environment
 
 cat >> /etc/environment <<EOL
 JAVA_HOME=/usr/lib/jvm/java-8-oracle
 JRE_HOME=/usr/lib/jvm/java-8-oracle/jre
 EOL
+
+sudo chmod go-w /etc/environment
 
 ** Step6: Setup other dependencies... https://medium.com/@josemarcialportilla/installing-scala-and-spark-on-ubuntu-5665ee4b62b1
 
