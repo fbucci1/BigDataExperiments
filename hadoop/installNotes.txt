@@ -99,3 +99,18 @@ val wordCounts = tokenized.map((_, 1)).reduceByKey(_ + _)
 val filtered = wordCounts.filter(_._2 >= 5)
 System.out.println(filtered.collect().mkString(", "))
 :q
+
+** Step9: Install Hadoop... http://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-common/SingleCluster.html
+sudo apt-get install ssh
+sudo apt-get install pdsh
+Go to http://www.apache.org/dyn/closer.cgi/hadoop/common/ and download installer.
+cd ~/Downloads
+tar -xf hadoop-2.8.2.tar.gz 
+mv hadoop-2.8.2/ /usr/local/mybigdata/
+rm hadoop-2.8.2.tar.gz 
+
+cd ~
+mkdir input
+cp /usr/local/mybigdata/hadoop-2.8.2/etc/hadoop/*.xml input
+/usr/local/mybigdata/hadoop-2.8.2/bin/hadoop jar /usr/local/mybigdata/hadoop-2.8.2/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.8.2.jar grep input output 'dfs[a-z.]+'
+cat output/*
