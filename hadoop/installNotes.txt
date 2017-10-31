@@ -54,5 +54,19 @@ ssh administrator@u1404cdh 'sudo ls -la /etc/hosts'
 ** Step5: 
 sudo sysctl vm.swappiness=10 && sudo echo 'vm.swappiness = 10' | sudo tee -a /etc/sysctl.conf;
 
-** Step6: Setup Spark:
-https://medium.com/@josemarcialportilla/installing-scala-and-spark-on-ubuntu-5665ee4b62b1
+** Step6: Install Java 8... https://tecadmin.net/install-oracle-java-8-ubuntu-via-ppa/#
+sudo add-apt-repository ppa:webupd8team/java
+sudo apt-get update
+sudo apt-get install oracle-java8-installer
+java -version 
+	java version "1.8.0_xxx"
+sudo apt-get install oracle-java8-set-default
+
+cat >> /etc/environment <<EOL
+JAVA_HOME=/usr/lib/jvm/java-8-oracle
+JRE_HOME=/usr/lib/jvm/java-8-oracle/jre
+EOL
+
+** Step6: Setup other dependencies... https://medium.com/@josemarcialportilla/installing-scala-and-spark-on-ubuntu-5665ee4b62b1
+
+** Step7: Setup Spark:
