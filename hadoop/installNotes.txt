@@ -113,6 +113,7 @@ rm hadoop-2.8.2.tar.gz
 cd ~
 mkdir input
 cp /usr/local/mybigdata/hadoop-2.8.2/etc/hadoop/*.xml input
+#Runs without HDFS and without YARN
 /usr/local/mybigdata/hadoop-2.8.2/bin/hadoop jar /usr/local/mybigdata/hadoop-2.8.2/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.8.2.jar grep input output 'dfs[a-z.]+'
 cat output/*
 
@@ -148,6 +149,7 @@ bin/hdfs dfs -mkdir /user/administrator
 
 bin/hdfs dfs -mkdir input
 bin/hdfs dfs -put etc/hadoop/*.xml input
+#Runs with HDFS and without YARN
 bin/hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-2.8.2.jar grep input output 'dfs[a-z.]+'
 bin/hdfs dfs -cat output/*
 
@@ -175,3 +177,5 @@ sbin/start-yarn.sh
 
 http://192.168.56.102:8088/cluster
 
+#Runs with HDFS and with YARN
+bin/hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-2.8.2.jar grep input output 'dfs[a-z.]+'
