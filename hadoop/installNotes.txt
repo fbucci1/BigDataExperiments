@@ -93,7 +93,7 @@ rm spark-2.2.0-bin-hadoop2.7.tgz
 ** Step8: Check Spark: 
 echo "a b b b c c c c c c c d d d e e e e e e e e e e f f g h i">input.txt
 cd /usr/local/mybigdata/spark-2.2.0-bin-hadoop2.7/bin
-./spark-shell
+./spark-shell ##Runs Spark reading from filesystem
 
 val tokenized = sc.textFile("input.txt").flatMap(_.split(" "))
 val wordCounts = tokenized.map((_, 1)).reduceByKey(_ + _)
@@ -179,3 +179,13 @@ http://192.168.56.102:8088/cluster
 
 #Runs with HDFS and with YARN
 bin/hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-2.8.2.jar grep input output 'dfs[a-z.]+'
+
+cd /usr/local/mybigdata/spark-2.2.0-bin-hadoop2.7/bin
+../../hadoop-2.8.2/bin/hdfs dfs -put bin/input.txt
+./spark-shell ##Runs Spark integrated with HDFS
+
+val tokenized = sc.textFile("hdfs://localhost:9000/user/administrator/input.txt").flatMap(_.split(" "))
+val wordCounts = tokenized.map((_, 1)).reduceByKey(_ + _)
+val filtered = wordCounts.filter(_._2 >= 5)
+System.out.println(filtered.collect().mkString(", "))
+:q
