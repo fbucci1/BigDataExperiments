@@ -92,6 +92,7 @@ rm spark-2.2.0-bin-hadoop2.7.tgz
 
 ** Step8: Check Spark: 
 echo "a b b b c c c c c c c d d d e e e e e e e e e e f f g h i">input.txt
+cd /usr/local/mybigdata/spark-2.2.0-bin-hadoop2.7/bin
 ./spark-shell
 
 val tokenized = sc.textFile("input.txt").flatMap(_.split(" "))
