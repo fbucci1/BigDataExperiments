@@ -190,7 +190,14 @@ val filtered = wordCounts.filter(_._2 >= 5)
 System.out.println(filtered.collect().mkString(", "))
 :q
 
+#Add Spark and Hadoop to PATH
 gedit ~/.profile, add:
 SPARK_HOME=/usr/local/mybigdata/spark-2.2.0-bin-hadoop2.7
 HADOOP_HOME=/usr/local/mybigdata/hadoop-2.8.2
 PATH="$HADOOP_HOME/bin:$SPARK_HOME/bin:$PATH"
+
+#Change Spark log level
+cp /usr/local/mybigdata/spark-2.2.0-bin-hadoop2.7/conf/log4j.properties.template /usr/local/mybigdata/spark-2.2.0-bin-hadoop2.7/conf/log4j.properties
+gedit /usr/local/mybigdata/spark-2.2.0-bin-hadoop2.7/conf/log4j.properties
+Change INFO -> WARN in the line log4j.rootCategory=WARN, console
+
