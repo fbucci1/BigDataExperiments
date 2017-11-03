@@ -189,3 +189,8 @@ val wordCounts = tokenized.map((_, 1)).reduceByKey(_ + _)
 val filtered = wordCounts.filter(_._2 >= 5)
 System.out.println(filtered.collect().mkString(", "))
 :q
+
+gedit ~/.profile, add:
+SPARK_HOME=/usr/local/mybigdata/spark-2.2.0-bin-hadoop2.7
+HADOOP_HOME=/usr/local/mybigdata/hadoop-2.8.2
+PATH="$HADOOP_HOME/bin:$SPARK_HOME/bin:$PATH"
