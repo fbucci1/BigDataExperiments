@@ -34,7 +34,7 @@ sudo docker run --name sonarqube1 -it -d -p 9001:9000 -p 9092:9092 sonarqube
 
 # Setup Postgresql
 ```
-docker run --name postgres1 -it -p 33000:5432 -v /docker_volumes/postgres1/data:/var/lib/postgresql/data -e POSTGRES_PASSWORD=apassword  postgres:latest
+docker run --name postgres1 -it -p 5432:5432 -v /docker_volumes/postgres1/data:/var/lib/postgresql/data -e POSTGRES_PASSWORD=apassword  postgres:latest
 ```
 
 # Setup Hadoop, Spark, Spark-notebook.
