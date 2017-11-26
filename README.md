@@ -18,7 +18,7 @@ $ docker run --name portainer1 -d -p 9000:9000 -v /var/run/docker.sock:/var/run/
 docker network create dokuwiki-tier
 docker run --name dokuwiki1 -it -d -p 80:80 -p 443:443 -v /docker_volumes/dokuwiki1:/bitnami --net dokuwiki-tier -e DOKUWIKI_USERNAME=administrador --restart always bitnami/dokuwiki:latest
 ```
-Install template. http://www.inmotionhosting.com/support/edu/dokuwiki/change-dokuwiki-appearance/change-template-dokuwiki. E.g. https://www.dokuwiki.org/template:writr
+Install template. http://www.inmotionhosting.com/support/edu/dokuwiki/change-dokuwiki-appearance/change-template-dokuwiki. E.g. https://www.dokuwiki.org/template:writr restart is needed in order to pick up new template.
 
 # Setup Jenkins
 ```
