@@ -10,13 +10,13 @@ Setup development environment using Docker:
 
 # Setup Portainer
 ```
-$ docker run --name portainer1 -d -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock portainer/portainer
+$ docker run --name portainer1 -d -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock --restart always portainer/portainer
 ```
 
 # Setup Dokuwiki
 ```
 docker network create dokuwiki-tier
-docker run --name dokuwiki1 -it -d -p 80:80 -p 443:443 --net dokuwiki-tier -e DOKUWIKI_USERNAME=administrador -v /docker_volumes/dokuwiki1:/bitnami bitnami/dokuwiki:latest
+docker run --name dokuwiki1 -it -d -p 80:80 -p 443:443 -v /docker_volumes/dokuwiki1:/bitnami --net dokuwiki-tier -e DOKUWIKI_USERNAME=administrador --restart always bitnami/dokuwiki:latest
 ```
 
 # Setup Jenkins
@@ -33,11 +33,11 @@ sudo docker run --name sonarqube1 -it -d -p 9001:9000 -p 9092:9092 sonarqube
 
 # Setup Postgresql
 ```
-docker run --name postgres1 -it -v /docker_volumes/postgres1/data:/var/lib/postgresql/data -p 33000:5432 -e POSTGRES_PASSWORD=apassword  postgres:latest
+docker run --name postgres1 -it -p 33000:5432 -v /docker_volumes/postgres1/data:/var/lib/postgresql/data -e POSTGRES_PASSWORD=apassword  postgres:latest
 ```
 
 # Setup Hadoop, Spark, Spark-notebook.
 Notice only ext folder is mounted as a volume, therefore only notebooks in there are save outside the container.
 ```
-sudo docker run --name spark-notebook1 -v /docker_volumes/spark-notebook1/notebooks_ext:/opt/docker/notebooks/ext -p 9001:9000 andypetrella/spark-notebook:0.9.0-SNAPSHOT-scala-2.11.8-spark-2.2.0-hadoop-2.7.2
+sudo docker run --name spark-notebook1 -p 9001:9000 -v /docker_volumes/spark-notebook1/notebooks_ext:/opt/docker/notebooks/ext andypetrella/spark-notebook:0.9.0-SNAPSHOT-scala-2.11.8-spark-2.2.0-hadoop-2.7.2
 ```
