@@ -29,7 +29,7 @@ docker run --name jenkins1 -it -p 8080:8080 -v /docker_volumes/jenkins1/jenkins_
 
 # Setup Sonar
 ```
-sudo docker run --name sonarqube1 -it -d -p 9001:9000 -p 9092:9092 sonarqube
+sudo docker run --name sonarqube1 -it -d -p 9002:9000 -p 9092:9092 sonarqube
 ```
 
 # Setup Postgresql
