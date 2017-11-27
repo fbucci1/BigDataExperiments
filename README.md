@@ -40,5 +40,5 @@ docker run --name postgres1 -it -p 5432:5432 -v /docker_volumes/postgres1/data:/
 # Setup Hadoop, Spark, Spark-notebook.
 Notice only ext folder is mounted as a volume, therefore only notebooks in there are save outside the container.
 ```
-sudo docker run --name spark-notebook1 -p 9001:9000 -v /docker_volumes/spark-notebook1/notebooks_ext:/opt/docker/notebooks/ext andypetrella/spark-notebook:0.9.0-SNAPSHOT-scala-2.11.8-spark-2.2.0-hadoop-2.7.2
+sudo docker run --name spark-notebook1 -p 9001:9000 -v /docker_volumes/spark-notebook1/notebooks_ext:/opt/docker/notebooks/ext andypetrella/spark-notebook:0.9.0-SNAPSHOT-scala-2.11.8-spark-2.2.0-hadoop-2.7.2-with-hive
 ```
