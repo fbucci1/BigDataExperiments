@@ -44,7 +44,7 @@ sudo docker run --name spark-notebook1 -p 9001:9000 -v /docker_volumes/spark-not
 ```
 # Setup Hive.
 ```
-docker run -d -p 10000:10000 --name hive gillax/hive:latest
+docker run --name hive1 -d -p 10000:10000 gillax/hive:latest
 #and exec hiveserver2
 docker exec -d hive hiveserver2
 #run jdbc sample application
