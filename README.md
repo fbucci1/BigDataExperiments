@@ -42,3 +42,11 @@ Notice only ext folder is mounted as a volume, therefore only notebooks in there
 ```
 sudo docker run --name spark-notebook1 -p 9001:9000 -v /docker_volumes/spark-notebook1/notebooks_ext:/opt/docker/notebooks/ext andypetrella/spark-notebook:0.9.0-SNAPSHOT-scala-2.11.8-spark-2.2.0-hadoop-2.7.2-with-hive
 ```
+# Setup Hive.
+```
+docker run -d -p 10000:10000 --name hive gillax/hive:latest
+#and exec hiveserver2
+docker exec -d hive hiveserver2
+#run jdbc sample application
+./gradlew runApp
+```
